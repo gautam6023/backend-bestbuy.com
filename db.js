@@ -5,7 +5,6 @@ const connection = mongoose.connect(
 );
 
 const ProductSchema = new mongoose.Schema({
-  id: Number,
   imgUrl: String,
   title: String,
   rate: String,
@@ -16,10 +15,21 @@ const ProductSchema = new mongoose.Schema({
   brand: [String],
   availability: [String],
   currantOffers: [String],
-  _id: String,
 });
 const FilterdData = new mongoose.Schema({
-  id: Number,
+  imgUrl: String,
+  title: String,
+  rate: String,
+  top: String,
+  price: String,
+  save: String,
+  end: String,
+  brand: [String],
+  availability: [String],
+  currantOffers: [String],
+});
+
+const CartSchema = new mongoose.Schema({
   imgUrl: String,
   title: String,
   rate: String,
@@ -31,7 +41,9 @@ const FilterdData = new mongoose.Schema({
   availability: [String],
   currantOffers: [String],
   _id: String,
+  qut: Number,
 });
 const Product = mongoose.model("Product", ProductSchema);
 const Filter = mongoose.model("filter", FilterdData);
-module.exports = { Product, Filter, connection };
+const Cart = mongoose.model("cartProduct", CartSchema);
+module.exports = { Product, Filter, connection, Cart };

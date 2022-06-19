@@ -1,8 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 // db.productsData.find({title:/a/i})
 const cors = require("cors");
 const app = express();
-const { connection, Product, Filter } = require("./db");
+const { connection, Product, Filter, Cart } = require("./db");
 app.disable("etag");
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -48,6 +49,7 @@ app.get("/products", async (req, res) => {
 
 app.get("/products/:id", async (req, res) => {
   try {
+    console.log(req.params);
     const { id } = req.params;
     const productsData = await Product.findById(id);
     return res.status(200).json({ data: productsData });
@@ -246,6 +248,49 @@ app.post("/", async (req, res) => {
   }
 });
 
+app.post("/cart", async (req, res) => {
+  try {
+    const productsData = await Cart.create(req.body);
+    return res.status(201).json(productsData);
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+});
+
+app.get("/cart", async (req, res) => {
+  try {
+    const productsData = await Cart.find();
+    return res.status(201).json(productsData);
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+});
+
+app.delete("/cart/:id", async (req, res) => {
+  try {
+    //  findByIdAndDelete({ _id: req.params.id });
+    // deleteOne({ id: req.params.id });
+    // findOneAndDelete({ property: of data   });
+    console.log(req.params);
+    const movies = await Cart.findByIdAndDelete(req.params.id);
+    return res.status(200).json({ data: movies });
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+});
+
+app.patch("/cart/:id", async (req, res) => {
+  try {
+    console.log(req.params);
+    const updateMovies = await Cart.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+
+    return res.status(200).json({ data: updateMovies });
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+});
 // app.post("/filter", async (req, res) => {
 //   try {
 //     console.log(req.body);
