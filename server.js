@@ -248,6 +248,13 @@ app.post("/", async (req, res) => {
   }
 });
 
+app.get("/", async (req, res) => {
+  try {
+    return res.status(201).json("Welcome");
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+});
 app.post("/cart", async (req, res) => {
   try {
     const productsData = await Cart.create(req.body);
