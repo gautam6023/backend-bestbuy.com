@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 // db.productsData.find({title:/a/i})
 const cors = require("cors");

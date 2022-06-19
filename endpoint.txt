@@ -1,0 +1,2 @@
+Signup :http://localhost:8080/api/users
+Login :http://localhost:8080/api/auth
