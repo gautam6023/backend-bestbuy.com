@@ -300,8 +300,8 @@ app.patch("/cart/:id", async (req, res) => {
 //     return res.status(500).json({ message: e.message });
 //   }
 // });
-
-app.listen(8080, async () => {
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, async () => {
   try {
     await connection;
     console.log("Server Connected to port 8080");
