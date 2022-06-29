@@ -74,7 +74,7 @@ app.get("/filter", async (req, res) => {
     delete req.query.page;
     delete req.query.per_page;
   }
-
+  console.log(req.query);
   try {
     // availibality: { $in: req.query.availibality },
     if (
