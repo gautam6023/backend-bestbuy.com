@@ -74,7 +74,7 @@ app.get("/filter", async (req, res) => {
     delete req.query.page;
     delete req.query.per_page;
   }
-  console.log(req.query);
+  console.log(req.query, "query");
   try {
     // availibality: { $in: req.query.availibality },
     if (
@@ -93,6 +93,7 @@ app.get("/filter", async (req, res) => {
         .lean()
         .exec();
 
+      // console.log(movies);
       const totalUsers = await Product.find(req.query)
         .countDocuments()
         .lean()
@@ -236,6 +237,43 @@ app.get("/filter", async (req, res) => {
     // res.status(200).json({ data: movies, totalPage });
   } catch (e) {
     return res.status(500).json({ message: e.message });
+  }
+});
+
+//Update for filters by Gautam
+
+app.get("/query", async (req, res) => {
+  const query = req.query;
+  console.log(query);
+  try {
+    // const filteredProducts = await Product.find({
+    //   brand: query.filterBrands && { $all: [...query.filterBrands] },
+    //   availability: query.availability && { $in: [...query.availability] },
+    //   currantOffers: query.currantOffers && { $in: [...query.currantOffers] },
+    // });
+
+    const filterData = await Product.find({
+      $or: [
+        {
+          brand: query.filterBrands && { $in: [...query.filterBrands] },
+        },
+        {
+          availability: query.availability && {
+            $all: [...query.availability],
+          },
+        },
+        {
+          currantOffers: query.currantOffers && {
+            $all: [...query.currantOffers],
+          },
+        },
+      ],
+    });
+
+    res.status(200).json({ data: filterData });
+    // console.log(filterData);
+  } catch (e) {
+    console.log(e);
   }
 });
 
