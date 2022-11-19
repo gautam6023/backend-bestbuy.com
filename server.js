@@ -244,7 +244,9 @@ app.get("/filter", async (req, res) => {
 
 app.get("/query", async (req, res) => {
   const query = req.query;
-  console.log(query);
+
+  let isThereAnyQuery = Object.keys(req.query);
+
   try {
     // const filteredProducts = await Product.find({
     //   brand: query.filterBrands && { $all: [...query.filterBrands] },
@@ -252,25 +254,29 @@ app.get("/query", async (req, res) => {
     //   currantOffers: query.currantOffers && { $in: [...query.currantOffers] },
     // });
 
-    const filterData = await Product.find({
-      $or: [
-        {
-          brand: query.filterBrands && { $in: [...query.filterBrands] },
-        },
-        {
-          availability: query.availability && {
-            $all: [...query.availability],
+    if (isThereAnyQuery) {
+      const filterData = await Product.find({
+        $or: [
+          {
+            brand: query.filterBrands && { $in: [...query.filterBrands] },
           },
-        },
-        {
-          currantOffers: query.currantOffers && {
-            $all: [...query.currantOffers],
+          {
+            availability: query.availability && {
+              $all: [...query.availability],
+            },
           },
-        },
-      ],
-    });
+          {
+            currantOffers: query.currantOffers && {
+              $all: [...query.currantOffers],
+            },
+          },
+        ],
+      });
 
-    res.status(200).json({ data: filterData });
+      return res.status(200).json({ data: filterData });
+    }
+    const data = await Product.find();
+    res.status(200).json({ data: data });
     // console.log(filterData);
   } catch (e) {
     console.log(e);
